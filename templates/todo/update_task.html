@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Task{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Update Task</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="content" class="form-label">Task Content</label>
+            <textarea id="content" name="content" class="form-control" required>{{ task.content }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="deadline" class="form-label">Deadline</label>
+            <input type="datetime-local" id="deadline" name="deadline" class="form-control" value="{{ task.deadline|date:'Y-m-d\TH:i' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Tags</label>
+            {% for tag in tags %}
+                <div class="form-check">
+                    <input type="checkbox" id="tag-{{ tag.id }}" name="tags" value="{{ tag.id }}" class="form-check-input"
+                           {% if tag in task.tags.all %}checked{% endif %}>
+                    <label for="tag-{{ tag.id }}" class="form-check-label">{{ tag.name }}</label>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary">Update Task</button>
+    </form>
+</div>
+{% endblock %}
